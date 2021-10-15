@@ -18,9 +18,10 @@ export const usePlanForm = () => {
     setTopics(copy);
   }
 
-  const setTitle = (title) => {
-    setTitle(title);
-  }
-
-  return {addTopic, setTopicField, setTitle};
+  return {
+    addTopic, 
+    setTopicField, 
+    setTitle,
+    formData: {title, topics}  
+  };
 }

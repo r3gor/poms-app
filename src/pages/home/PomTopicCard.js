@@ -4,6 +4,7 @@ import { Divider, IconButton, Typography } from '@mui/material';
 import Paper from '@mui/material/Paper';
 import { makeStyles } from '@mui/styles/';
 import React, { useEffect, useState } from 'react';
+import { useTopicTimer } from './useTopicTimer';
 
 const useStyle = makeStyles({
 
@@ -57,45 +58,9 @@ const useStyle = makeStyles({
   },
 })
 
-export const PomTopicCard = ({ title, poms, pomsDone, time, handleTicks }) => {
+export const PomTopicCard = ({ title, poms }) => {
 
-  const [timer, setTimer] = useState();
-  const [status, setStatus] = useState('PAUSE');
-
-  useEffect(() => {
-    if (poms === pomsDone) {
-      setStatus('TERMINADO');
-      clearInterval(timer);
-    }
-    return () => { }
-  }, [poms, pomsDone, timer])
-
-  const play = () => {
-    
-    if (status === 'TERMINADO') return;
-    
-    handleTicks();
-    if (time.m >= 5 && time.s >= 0)
-        setStatus('WORK')
-      else
-        setStatus('BREAK')
-
-    setTimer(setInterval(() => {
-      
-      if (time.m >= 5 && time.s >= 0)
-        setStatus('WORK')
-      else
-        setStatus('BREAK')
-    
-        handleTicks();
-    
-    }, 1000));
-  }
-
-  const pause = () => {
-    clearInterval(timer);
-    setStatus('PAUSE')
-  }
+  const { start, pause, time, status, pomsDone } = useTopicTimer(poms);
 
   const classes = useStyle();
 
@@ -110,16 +75,15 @@ export const PomTopicCard = ({ title, poms, pomsDone, time, handleTicks }) => {
         </Typography>
         <div className={classes.bodyTimer}>
           <div className={classes.timer}>
-
             {
               (status !== 'TERMINADO') ?
-                `${String(time.m).padStart(2, '0')}:${String(time.s).padStart(2, '0')}`
+                `${String(time.minutes).padStart(2, '0')}:${String(time.seconds).padStart(2, '0')}`
                 :
                 '00:00'
             }
           </div>
           <div className={classes.containerBtns}>
-            <IconButton onClick={play} size='small'>
+            <IconButton onClick={start} size='small'>
               <PlayCircleOutlineRoundedIcon />
             </IconButton>
             <IconButton onClick={pause} size='small'>

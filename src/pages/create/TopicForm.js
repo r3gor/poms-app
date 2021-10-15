@@ -34,7 +34,7 @@ export const TopicForm = ({ index, title, poms, handleChangeTopicForm }) => {
   const handleInputChange = (e) => {
     const formField = e.target.name;
     const newValue = parseInt(e.target.value) || e.target.value;
-    handleChangeTopicForm(formField, index, newValue)
+    handleChangeTopicForm(index, formField, newValue)
   }
 
   return (

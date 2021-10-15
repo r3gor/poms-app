@@ -4,8 +4,10 @@ import TextField from '@mui/material/TextField';
 import { makeStyles } from '@mui/styles';
 import React, { useState } from 'react';
 import { useHistory } from 'react-router';
+import { addNewPlan } from '../../data/data';
 import { TopicForm } from './TopicForm';
 import { TopicsFormContainer } from './TopicsFormContainer';
+import { usePlanForm } from './usePlanForm';
 
 // TODO: avoid anonymous lambda functions 
 
@@ -42,55 +44,35 @@ export const CreatePage = () => {
   const classes = useStyle();
   const history = useHistory();
 
-  const [planName, setPlanName] = useState('');
-  const [topicsData, setTopicsData] = useState([
-    { title: '', poms: '' }
-  ]);
-
-  const handleChangeTopicForm = (formField, index, newValue) => {
-
-    let copyTopicsData = [...topicsData];
-    copyTopicsData[index] = {
-      ...topicsData[index],
-      [formField]: newValue,
-    }
-    setTopicsData(copyTopicsData);
-  }
-
-  const handleAddTopicForm = () => {
-    setTopicsData([
-      ...topicsData,
-      { title: '', poms: '' }
-    ])
-  }
+  const { 
+    addTopic, setTopicField, 
+    setTitle, formData: { title, topics }
+  } = usePlanForm();
 
   const handleCreatePlan = () => {
-    const plans = JSON.parse(localStorage.getItem('plans'));
-    localStorage.setItem('plans', JSON.stringify({
-      ...plans, 
-      [planName]: topicsData
-    }) )
+    addNewPlan({ title, topics });
     history.push('/plans')
   }
 
   return (
     <Box className={classes.root}>
+
       <Box className={classes.titleContainer}>
-        <TextField variant='standard'
-          value={planName}
-          placeholder='Título'
-          onChange={(e) => { setPlanName(e.target.value) }}
+        <TextField
           InputProps={{ classes: { input: classes.title } }}
+          variant='standard'
+          placeholder='Título'
+          value={title}
+          onChange={(e) => { console.log('titkesadsad'); setTitle(e.target.value) }}
         />
       </Box>
 
-      <TopicsFormContainer handleAddNew={handleAddTopicForm}>
+      <TopicsFormContainer handleAddNew={addTopic}>
         {
-          topicsData.map(({ title, poms }, index) => (
-            <TopicForm
-              key={index}
+          topics.map(({ title, poms }, index) => (
+            <TopicForm key={index}
               title={title} poms={poms} index={index}
-              handleChangeTopicForm={handleChangeTopicForm}
+              handleChangeTopicForm={setTopicField}
             />
           ))
         }
@@ -101,6 +83,7 @@ export const CreatePage = () => {
           Crear
         </Button>
       </Box>
+      
     </Box>
   )
 }
