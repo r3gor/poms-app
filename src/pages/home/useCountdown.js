@@ -5,62 +5,50 @@ export const useCountdown = ({minutes, seconds}) => {
   const initialTime = {minutes, seconds};
 
   const [time, setTime] = useState(initialTime);
-  const [timer, setTimer] = useState();
+  const [timer, setTimer] = useState(false);
 
   const tick = () => {
-    console.log('TICK');
 
-    console.log(time)
-    // debugger;
+    setTime((time) => {
 
-    // let {minutes: _minutes, seconds: _seconds} = time;
+      let { minutes, seconds } = time;
 
-    let _minutes = time.minutes;
-    let _seconds = time.seconds;
+      seconds -= 1;
 
-    _seconds -= 1;
-  
-    // if (_seconds < 0 && _minutes > 0) {
-    //   _seconds = 59;
-    //   _minutes -= 1;
-    // }
-    
-    setTime({minutes: _minutes, seconds: _seconds});
+      if (seconds < 0 && minutes > 0) {
+        seconds = 59;
+        minutes -= 1;
+      }
 
+      return { minutes, seconds }
+    })
+
+  }
+
+  const timerAlive = () => {
+    return !!timer;
   }
 
   const isOver = () => {
-    console.log('IS OVER?');
-
     return (time.minutes === 0 && time.seconds === 0);
-
   }
 
   const start = () => {
-    console.log('START');
+    if (isOver() || timerAlive()) return;
 
-    // debugger;
-
-    // if (isOver()) return;
-
-    // tick();
-    setInterval(tick, 1000)
-    // setTimer(setInterval(tick, 1000));
-
+    tick();
+    setTimer(setInterval(tick, 10));
   }
 
   const pause = () => {
-    console.log('PAUSE');
     clearInterval(timer);
-  
+    setTimer(false);
   }
 
   const reset = () => {
-    console.log('RESET');
     setTime(initialTime);
-
   }
 
-  return {start, pause, reset, isOver, time};
+  return { start, pause, reset, isOver, timer, time };
 
 }

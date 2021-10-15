@@ -3,7 +3,7 @@ import PlayCircleOutlineRoundedIcon from '@mui/icons-material/PlayCircleOutlineR
 import { Divider, IconButton, Typography } from '@mui/material';
 import Paper from '@mui/material/Paper';
 import { makeStyles } from '@mui/styles/';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useTopicTimer } from './useTopicTimer';
 
 const useStyle = makeStyles({
@@ -66,36 +66,45 @@ export const PomTopicCard = ({ title, poms }) => {
 
   return (
     <Paper elevation={4} className={classes.root}>
+
       <Typography variant='h5' className={classes.title}>
         {title}
       </Typography>
+      
       <div className={classes.body}>
+        
         <Typography variant='body1' className={classes.bodyText}>
           {pomsDone}/{poms} Pomodoros
         </Typography>
+        
         <div className={classes.bodyTimer}>
+          
           <div className={classes.timer}>
             {
-              (status !== 'TERMINADO') ?
-                `${String(time.minutes).padStart(2, '0')}:${String(time.seconds).padStart(2, '0')}`
-                :
-                '00:00'
+              `${String(time.minutes).padStart(2, '0')}:${String(time.seconds).padStart(2, '0')}`
             }
           </div>
+          
           <div className={classes.containerBtns}>
+            
             <IconButton onClick={start} size='small'>
               <PlayCircleOutlineRoundedIcon />
             </IconButton>
             <IconButton onClick={pause} size='small'>
               <PauseCircleOutlineRoundedIcon />
             </IconButton>
+          
           </div>
         </div>
+        
       </div>
+      
       <Divider />
+      
       <Typography variant='h6' color='CaptionText' className={classes.footer}>
         {status}
       </Typography>
+    
     </Paper>
   )
 }

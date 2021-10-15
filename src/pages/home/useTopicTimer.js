@@ -1,40 +1,44 @@
 import React, { useEffect, useState } from 'react'
 import { useCountdown } from './useCountdown';
 
-// const status = {  
-//   TRABAJO: 1,
-//   DESCANSO: 2,
-//   PAUSA: 3,
-//   TERMINADO: 4
-// };
-
 export const useTopicTimer = (poms) => {
 
-  const { start, pause, reset, isOver, time } = useCountdown({ minutes: 30, seconds: 0 });
+  const { start, pause, reset, isOver, timer, time } = useCountdown({ minutes: 5, seconds: 0 });
   const [status, setStatus] = useState('PAUSE');
   const [pomsDone, setPomsDone] = useState(0);
 
   useEffect(() => {
 
-    if (time.minutes < 5)
-      setStatus('DESCANSO');
+    if (!timer && status !== "TERMINADO") setStatus('PAUSA');
 
-    else
-      setStatus('TRABAJO');
+  }, [timer])
 
-    if (isOver()) {
-      reset();
-      setPomsDone(poms + 1);
+
+  useEffect(() => {
+
+    if (status !== "TERMINADO") {
+
+      setStatus(time.minutes < 5 ? "DESCANSO" : "TRABAJO")
+
+      if (isOver()) setPomsDone((pomsDone) => pomsDone + 1);
+
     }
 
   }, [time])
 
+
   useEffect(() => {
 
-    if (pomsDone === poms)
-      setStatus('TERMINADO');
+    if (pomsDone === poms) {
 
-  }, [poms])
+      setStatus('TERMINADO');
+      pause();
+
+    }
+
+    else reset();
+
+  }, [pomsDone])
 
   return { start, pause, time, status, pomsDone };
 }
