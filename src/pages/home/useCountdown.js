@@ -1,16 +1,13 @@
-import React, { useState } from 'react'
+import { useState } from "react";
 
-export const useCountdown = ({minutes, seconds}) => {
-
-  const initialTime = {minutes, seconds};
+export const useCountdown = ({ minutes, seconds }) => {
+  const initialTime = { minutes, seconds };
 
   const [time, setTime] = useState(initialTime);
   const [timer, setTimer] = useState(false);
 
   const tick = () => {
-
     setTime((time) => {
-
       let { minutes, seconds } = time;
 
       seconds -= 1;
@@ -20,35 +17,33 @@ export const useCountdown = ({minutes, seconds}) => {
         minutes -= 1;
       }
 
-      return { minutes, seconds }
-    })
-
-  }
+      return { minutes, seconds };
+    });
+  };
 
   const timerAlive = () => {
     return !!timer;
-  }
+  };
 
   const isOver = () => {
-    return (time.minutes === 0 && time.seconds === 0);
-  }
+    return time.minutes === 0 && time.seconds === 0;
+  };
 
   const start = () => {
     if (isOver() || timerAlive()) return;
 
     tick();
-    setTimer(setInterval(tick, 10));
-  }
+    setTimer(setInterval(tick, 1000));
+  };
 
   const pause = () => {
     clearInterval(timer);
     setTimer(false);
-  }
+  };
 
   const reset = () => {
     setTime(initialTime);
-  }
+  };
 
   return { start, pause, reset, isOver, timer, time };
-
-}
+};
