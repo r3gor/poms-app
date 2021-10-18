@@ -4,7 +4,7 @@ import TextField from "@mui/material/TextField";
 import { makeStyles } from "@mui/styles";
 import React from "react";
 import { useHistory } from "react-router";
-import { addNewPlan } from "../../data/Data";
+import { LS_addNewPlan } from "../../data/Data";
 import { TopicForm } from "./TopicForm";
 import { TopicsFormContainer } from "./TopicsFormContainer";
 import { usePlanForm } from "./usePlanForm";
@@ -51,7 +51,7 @@ export const CreatePage = () => {
   } = usePlanForm();
 
   const handleCreatePlan = () => {
-    addNewPlan({ title, topics });
+    LS_addNewPlan({ title, topics });
     history.push("/plans");
   };
 

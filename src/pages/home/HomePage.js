@@ -1,13 +1,11 @@
 import Box from "@mui/material/Box";
 import React from "react";
-import { getPlans, getSelectedPlanIndex } from "../../data/Data";
+import { LS_getPlans, LS_getSelectedPlanIndex } from "../../data/Data.js";
 import { PomTopicCard } from "./PomTopicCard";
 
 export const HomePage = () => {
-  const planIndex = getSelectedPlanIndex();
-  const plan = getPlans()[planIndex];
-
-  console.log('Homepage')
+  const planIndex = LS_getSelectedPlanIndex();
+  const plan = LS_getPlans()[planIndex];
 
   if (planIndex == null) return <h3> No ha seleccionado ningun plan </h3>;
 

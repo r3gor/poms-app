@@ -1,18 +1,36 @@
-export const addNewPlan = (plan) => {
-  const plans = JSON.parse(localStorage.getItem("plans")) || [];
-  plans.push(plan);
+// TODO: use id instead of array index
+
+export const LS_getPlans = () => {
+  return JSON.parse(localStorage.getItem("plans")) || [];
+};
+
+export const LS_setPlans = (plans) => {
   localStorage.setItem("plans", JSON.stringify(plans));
-};
+}
 
-export const getPlans = () => {
-  return JSON.parse(localStorage.getItem("plans"));
-};
-
-export const setSelectedPlanIndex = (index) => {
+export const LS_setSelectedPlanIndex = (index) => {
   localStorage.setItem("planSelected", parseInt(index));
 };
 
-export const getSelectedPlanIndex = () => {
-  const index = parseInt(localStorage.getItem("planSelected"));
-  return index != null ? index : false;
+export const LS_addNewPlan = (plan) => {
+  const plans = LS_getPlans();
+  plans.push(plan);
+  LS_setPlans(plans);
 };
+
+export const LS_getSelectedPlanIndex = () => {
+  const index = localStorage.getItem("planSelected");
+  return index != null ? parseInt(index) : null;
+};
+
+export const LS_deletePlan = (index) => {
+  const plans = LS_getPlans();
+  plans.splice(index, 1);
+  LS_setPlans(plans);
+
+  const sidx = LS_getSelectedPlanIndex();
+  if (sidx > index)
+    LS_setSelectedPlanIndex(sidx - 1);
+  if (sidx == index)
+    localStorage.removeItem('planSelected');
+}

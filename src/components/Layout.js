@@ -1,5 +1,6 @@
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import Add from "@mui/icons-material/Add";
+import AddCircle from "@mui/icons-material/AddCircle";
+import LibraryBooks from "@mui/icons-material/LibraryBooks";
 import {
   AppBar,
   CssBaseline,
@@ -10,15 +11,15 @@ import {
   ListItemIcon,
   ListItemText,
   Toolbar,
-  Typography,
+  Typography
 } from "@mui/material";
 import Box from "@mui/material/Box";
 import { makeStyles } from "@mui/styles";
-import React from "react";
+import { format as fnsFormat } from "date-fns";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { FormatDateES } from "../utils/FormatDateES";
 import { Logo } from "./Logo";
-import CreateIcon from '@mui/icons-material/Create';
-import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 
 const sidebarSize = 175;
 
@@ -69,28 +70,37 @@ const useStyles = makeStyles({
 
 export const Layout = ({ children }) => {
   const classes = useStyles();
+  const [date, setDate] = useState(new Date());
   const sidebarBtns = [
     {
       label: "Nuevo plan",
-      icon: <CreateIcon />,
+      icon: <AddCircle />,
       link: "/create",
     },
     {
       label: "Mis planes",
-      icon: <LibraryBooksIcon />,
+      icon: <LibraryBooks />,
       link: "/plans",
     },
   ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {setDate(new Date())}, 1000);
+    return () => {
+      clearInterval(interval);
+    }
+  }, [])
 
   return (
     <>
       <CssBaseline />
       <div className={classes.root}>
-        <AppBar position="static" className={classes.appbar}>
+        <AppBar sx={{background: 'rgb(243,67,52)'}}  position="static" className={classes.appbar}>
           <Toolbar className={classes.toolbar}>
-            <Typography variant="h6">¡Bienvenido!</Typography>
+            <Typography width='65px' component="span" variant="h5">{ date.toLocaleTimeString() }</Typography>
+            <Typography component="span" variant="h6">{ FormatDateES(date) }</Typography>
             <IconButton>
-              <AccountCircle />
+              <AccountCircle sx={{color: 'white'}} />
             </IconButton>
           </Toolbar>
         </AppBar>

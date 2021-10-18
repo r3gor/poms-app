@@ -9,7 +9,7 @@ const theme = createTheme({
     fontWeightRegular: 500,
     fontWeightMedium: 600,
     fontWeightBold: 700,
-  }
+  },
 })
 
 export const App = () => {
